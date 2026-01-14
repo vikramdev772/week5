@@ -4,34 +4,31 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.myapp.dto.SignupReq;
+import com.example.myapp.dto.LoginRequest;
+import com.example.myapp.service.AuthService;
 import com.example.myapp.model.User;
 import com.example.myapp.repo.UserRepo;
 
 @CrossOrigin(origins = "*")
 @RestController
+@RequestMapping("/auth")
 public class Auth {
-    
+
     @Autowired
-    UserRepo db;
+    private AuthService authService;
 
     @PostMapping("/signup")
-    String Signup(@RequestBody SignupReq sd){
-        System.out.println("\n\t name : "+sd.getName());
-        System.out.println("\n\t email : "+sd.getEmail());
-        System.out.println("\n\t password : "+sd.getPassword());
-
-        User ud=new User();
-        ud.setName(sd.getName());
-        ud.setEmail(sd.getEmail());
-        ud.setPassword(sd.getPassword());
-
-
-        db.save(ud);
-        return "signup sucess ...!";
+    public String signup(@RequestBody SignupReq req) {
+        return authService.signup(req);
     }
     
+    @PostMapping("/login")
+    public String login(@RequestBody LoginRequest req) {
+        return authService.login(req);
+    }
 }
