@@ -1,23 +1,31 @@
 package com.example.myapp.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.myapp.dto.LoginRequest;
 import com.example.myapp.dto.SignupReq;
 import com.example.myapp.model.User;
 import com.example.myapp.repo.UserRepo;
+import com.example.myapp.security.JwtService;
 
 @CrossOrigin(origins = "*")
 @RestController
+@RequestMapping("/a")
 public class Auth {
 
     @Autowired
     UserRepo db;
+    @Autowired
+    JwtService jwtService;
 
     @PostMapping("/signup")
     String Signup(@RequestBody SignupReq sd) {
@@ -31,20 +39,27 @@ public class Auth {
         ud.setPassword(sd.getPassword());
 
         db.save(ud);
-        return "signup sucess ...!";
+        return "signup success ...!";
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody LoginRequest data) {
-
-        User user = db.findByEmail(data.getEmail())
-                .orElseThrow(() -> new RuntimeException("User not found"));
-
-        if (!user.getPassword().equals(data.getPassword())) {
-            throw new RuntimeException("Invalid password");
+    public Map<Object,Object> login(@RequestBody LoginRequest data) {
+       Map<Object,Object> res = new HashMap<>();
+       Optional<User> op = db.findByEmail(data.getEmail());
+        if (op.isEmpty()) {
+            res.put("message", "Invalid credentials");
+            return res;
         }
-
-        return "Login successful";
+        User user = op.get();
+        if (!user.getPassword().equals(data.getPassword())) {
+            res.put("message", "Invalid credentials");
+            return res;
+        }
+        String token = jwtService.generateToken(user.getEmail());
+        res.put("token", token);
+        return res;
     }
 
-}
+    }
+
+
