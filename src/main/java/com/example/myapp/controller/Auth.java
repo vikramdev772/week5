@@ -1,9 +1,11 @@
 package com.example.myapp.controller;
-
+import com.example.myapp.security.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -11,9 +13,9 @@ import com.example.myapp.dto.LoginRequest;
 import com.example.myapp.dto.SignupReq;
 import com.example.myapp.model.User;
 import com.example.myapp.repo.UserRepo;
-
-@CrossOrigin(origins = "*")
 @RestController
+@RequestMapping("/auth")
+@CrossOrigin(origins = "*")
 public class Auth {
 
     @Autowired
@@ -34,6 +36,10 @@ public class Auth {
         return "signup sucess ...!";
     }
 
+
+    @Autowired
+    private JwtService jwtService;   // 🔥 ADD THIS
+
     @PostMapping("/login")
     public String login(@RequestBody LoginRequest data) {
 
@@ -44,7 +50,9 @@ public class Auth {
             throw new RuntimeException("Invalid password");
         }
 
-        return "Login successful";
-    }
+        // 🔥 GENERATE TOKEN HERE
+        String token = jwtService.generateToken(user.getEmail());
 
+        return token;   // return JWT
+    }
 }
