@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title}">Dashboard</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <div class="container mt-4">
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <h1 class="h3 mb-4">Projects Dashboard</h1>
+                
+                <!-- Error Message -->
+                <div th:if="${error}" class="alert alert-danger" role="alert">
+                    <strong>Error:</strong> <span th:text="${error}"></span>
+                </div>
+                
+                <!-- Success Message -->
+                <div th:if="${success}" class="alert alert-success" role="alert">
+                    <strong>Success:</strong> <span th:text="${success}"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Projects: <span th:text="${totalProjects}">0</span></h5>
+                        
+                        <!-- DEBUG HTML - Add this above the table -->
+                        <div style="background: #fff3cd; border: 1px solid #ffeaa7; padding: 15px; margin-bottom: 20px; border-radius: 5px;">
+                            <h6 style="color: #856404; margin-bottom: 10px;">🔍 DEBUG INFORMATION</h6>
+                            <div th:if="${submissions != null}">
+                                <p style="margin: 5px 0;"><strong>Submissions object exists:</strong> ✅</p>
+                                <p style="margin: 5px 0;"><strong>Submissions size:</strong> <span th:text="${submissions.size()}" style="color: #28a745; font-weight: bold;">0</span></p>
+                                <p style="margin: 5px 0;"><strong>Submissions.isEmpty():</strong> <span th:text="${submissions.empty}" style="color: #dc3545; font-weight: bold;">true</span></p>
+                                <p style="margin: 5px 0;"><strong>First record ID:</strong> <span th:text="${!submissions.empty ? submissions[0].id : 'N/A'}">N/A</span></p>
+                                <p style="margin: 5px 0;"><strong>First record Name:</strong> <span th:text="${!submissions.empty ? submissions[0].name : 'N/A'}">N/A</span></p>
+                                
+                                <div th:if="!submissions.empty" style="margin-top: 10px;">
+                                    <strong>First 3 records:</strong>
+                                    <div th:each="s, iterStat : ${submissions}" th:if="${iterStat.count <= 3}" style="background: #f8f9fa; padding: 5px; margin: 5px 0; border-radius: 3px;">
+                                        <span th:text="${iterStat.count}">1</span>. ID: <span th:text="${s.id}">1</span>, Name: <span th:text="${s.name}">Name</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div th:unless="${submissions != null}">
+                                <p style="color: #dc3545; font-weight: bold;">❌ Submissions object is NULL!</p>
+                            </div>
+                        </div>
+                        
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Roll No</th>
+                                    <th>Branch</th>
+                                    <th>Section</th>
+                                    <th>Abstract</th>
+                                    <th>Frontend URL</th>
+                                    <th>Backend URL</th>
+                                    <th>GitHub URL</th>
+                                    <th>Created</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="submission : ${submissions}">
+                                    <td th:text="${submission.id}">1</td>
+                                    <td th:text="${submission.name}">Name</td>
+                                    <td th:text="${submission.rollNo}">Roll No</td>
+                                    <td th:text="${submission.branch}">Branch</td>
+                                    <td th:text="${submission.section}">Section</td>
+                                    <td th:text="${submission.abstractName}">Abstract</td>
+                                    <td>
+                                        <a th:href="${submission.frontendUrl}" target="_blank" 
+                                           th:text="${submission.frontendUrl}">URL</a>
+                                    </td>
+                                    <td>
+                                        <a th:href="${submission.backendUrl}" target="_blank" 
+                                           th:text="${submission.backendUrl}">URL</a>
+                                    </td>
+                                    <td>
+                                        <a th:if="${submission.githubUrl}" 
+                                           th:href="${submission.githubUrl}" target="_blank" 
+                                           th:text="${submission.githubUrl}">GitHub</a>
+                                        <span th:unless="${submission.githubUrl}">-</span>
+                                    </td>
+                                    <td th:text="${#temporals.format(submission.createdAt, 'MMM dd, yyyy HH:mm')}">Date</td>
+                                </tr>
+                                <tr th:if="${submissions.empty}">
+                                    <td colspan="10" class="text-center">No Projects Found</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/dashboard.js"></script>
+</body>
+</html>
