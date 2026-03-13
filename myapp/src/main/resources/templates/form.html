@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Form Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+    <div class="card shadow p-4" style="width: 500px;">
+        <h3 class="card-title text-center mb-4">Submit Entry</h3>
+        <form th:action="@{/form}" th:object="${entry}" method="post">
+            <div class="mb-3">
+                <label class="form-label">Roll No</label>
+                <input type="text" th:field="*{rollNo}" class="form-control" placeholder="Enter Roll No" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Name</label>
+                <input type="text" th:field="*{name}" class="form-control" placeholder="Enter Name" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Abstract</label>
+                <textarea th:field="*{abstractText}" class="form-control" placeholder="Enter Abstract" rows="3" required></textarea>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Frontend IP</label>
+                <input type="text" th:field="*{frontendIp}" class="form-control" placeholder="Enter Frontend IP" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Backend IP</label>
+                <input type="text" th:field="*{backendIp}" class="form-control" placeholder="Enter Backend IP" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">GitHub URL</label>
+                <input type="url" th:field="*{githubUrl}" class="form-control" placeholder="Enter GitHub URL" required>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Submit</button>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>
