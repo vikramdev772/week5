@@ -1,6 +1,6 @@
-package com.app.application.controller;
+package com.example.myapp;
 
-import com.app.application.entity.Entry;
+import com.example.application.entity.Entry;
 import com.app.application.repository.EntryRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
