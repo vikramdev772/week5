@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database Inspection</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .header {
+            background: #007bff;
+            color: white;
+            padding: 20px;
+            margin: -20px -20px 20px -20px;
+            border-radius: 8px 8px 0 0;
+        }
+        .record {
+            border: 1px solid #ddd;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 5px;
+            background: #f9f9f9;
+        }
+        .record h3 {
+            margin: 0 0 10px 0;
+            color: #007bff;
+        }
+        .field {
+            margin: 5px 0;
+            padding: 5px;
+            background: white;
+            border-radius: 3px;
+        }
+        .field strong {
+            display: inline-block;
+            width: 120px;
+            color: #333;
+        }
+        .error {
+            color: #dc3545;
+            background: #f8d7da;
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid #f5c6cb;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: #6c757d;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .back-link:hover {
+            background: #5a6268;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔍 Database Inspection</h1>
+            <p>Total Records Found: <span th:text="${totalRecords}">0</span></p>
+        </div>
+
+        <div th:if="${error}" class="error">
+            <h3>Error</h3>
+            <p th:text="${error}">Error message</p>
+        </div>
+
+        <div th:if="${allRecords != null and !allRecords.empty}">
+            <h2>📊 Database Records</h2>
+            <div th:each="record, iterStat : ${allRecords}" class="record">
+                <h3>Record #<span th:text="${iterStat.count}">1</span> (ID: <span th:text="${record.id}">1</span>)</h3>
+                <div class="field">
+                    <strong>Name:</strong> 
+                    <span th:text="${record.name != null ? record.name : 'NULL'}">Name</span>
+                </div>
+                <div class="field">
+                    <strong>Abstract Name:</strong> 
+                    <span th:text="${record.abstractName != null ? record.abstractName : 'NULL'}">Abstract</span>
+                </div>
+                <div class="field">
+                    <strong>Frontend URL:</strong> 
+                    <span th:text="${record.frontendUrl != null ? record.frontendUrl : 'NULL'}">Frontend URL</span>
+                </div>
+                <div class="field">
+                    <strong>Backend URL:</strong> 
+                    <span th:text="${record.backendUrl != null ? record.backendUrl : 'NULL'}">Backend URL</span>
+                </div>
+                <div class="field">
+                    <strong>Created At:</strong> 
+                    <span th:text="${record.createdAt != null ? record.createdAt : 'NULL'}">Created At</span>
+                </div>
+            </div>
+        </div>
+
+        <div th:if="${allRecords == null or allRecords.empty}">
+            <h2>📭 No Records Found</h2>
+            <p>The database appears to be empty or there was an issue accessing the data.</p>
+        </div>
+
+        <a href="/dashboard" class="back-link">← Back to Dashboard</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title}">Submit Form</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <div class="logo">Projects Evaluation Form</div>
+                <nav>
+                    <ul>
+                        <li><a href="/form" class="active">Form</a></li>
+                        <li><a href="/dashboard">Dashboard</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+
+        <main>
+            <div class="form-container">
+                <div th:if="${success}" class="alert alert-success" th:utext="${success}"></div>
+                <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
+                
+                <h1>Submit Your Information</h1>
+                
+                <form th:action="@{/form}" th:object="${formData}" method="post" onsubmit="return validateForm(this)">
+                    <div class="form-group">
+                        <label for="name">Name *</label>
+                        <input type="text" id="name" th:field="*{name}" placeholder="Enter your name" required>
+                        <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="error" th:text="${#fields.errors('name')}">Name is required</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="rollNo">Roll Number *</label>
+                        <input type="text" id="rollNo" th:field="*{rollNo}" placeholder="Enter roll number" required>
+                        <div th:if="${#fields.hasErrors('rollNo')}" th:errors="*{rollNo}" class="error" th:text="${#fields.hasErrors('rollNo')}">Roll Number is required</div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="branch">Branch *</label>
+                            <select id="branch" th:field="*{branch}" required>
+                                <option value="">Select Branch</option>
+                                <option value="Computer Science">Computer Science</option>
+                                <option value="Information Technology">Information Technology</option>
+                                <option value="Electronics">Electronics</option>
+                                <option value="Electrical">Electrical</option>
+                                <option value="Mechanical">Mechanical</option>
+                                <option value="Civil">Civil</option>
+                                <option value="Chemical">Chemical</option>
+                                <option value="Biotechnology">Biotechnology</option>
+                            </select>
+                            <div th:if="${#fields.hasErrors('branch')}" th:errors="*{branch}" class="error" th:text="${#fields.hasErrors('branch')}">Branch is required</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="section">Section *</label>
+                            <select id="section" th:field="*{section}" required>
+                                <option value="">Select Section</option>
+                                <option value="A">Section A</option>
+                                <option value="B">Section B</option>
+                                <option value="C">Section C</option>
+                                <option value="D">Section D</option>
+                            </select>
+                            <div th:if="${#fields.hasErrors('section')}" th:errors="*{section}" class="error" th:text="${#fields.hasErrors('section')}">Section is required</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="frontendUrl">Frontend URL *</label>
+                        <input type="url" id="frontendUrl" th:field="*{frontendUrl}" placeholder="https://example.com/frontend" required>
+                        <div th:if="${#fields.hasErrors('frontendUrl')}" th:errors="*{frontendUrl}" class="error"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="backendUrl">Backend URL *</label>
+                        <input type="url" id="backendUrl" th:field="*{backendUrl}" placeholder="https://api.example.com" required>
+                        <div th:if="${#fields.hasErrors('backendUrl')}" th:errors="*{backendUrl}" class="error"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="githubUrl">GitHub Profile URL (Optional)</label>
+                        <input type="url" id="githubUrl" th:field="*{githubUrl}" placeholder="https://github.com/username">
+                        <div th:if="${#fields.hasErrors('githubUrl')}" th:errors="*{githubUrl}" class="error"></div>
+                    </div>
+
+                    <button type="submit" class="submit-btn">Submit</button>
+                </form>
+            </div>
+        </main>
+
+        <footer>
+            <p>&copy; 2024 Form Application. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script src="/js/dashboard.js"></script>
+</body>
+</html>
